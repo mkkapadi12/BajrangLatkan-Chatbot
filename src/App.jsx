@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ICONS } from "./assets/Icons/icons";
 import styled from "styled-components";
 import ChatForm from "./components/ChatForm";
@@ -8,6 +8,8 @@ const apiKey = process.env.GEMINI_API_KEY;
 
 const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
+  const [showchatBot, setShowchatBot] = useState(false);
+  const chatBodyRef = useRef();
 
   const generateBotResponse = async (history) => {
     const updateHistory = (text) => {
@@ -55,22 +57,59 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    // auto scroll whenever chat History updates
+    chatBodyRef.current.scrollTo({
+      top: chatBodyRef.current.scrollHeight,
+      behavour: "smooth",
+    });
+  }, [chatHistory]);
+
   return (
     <>
-      <Wrapper className="container bg-gradient-to-r from-[#f4f0ff,#dacdff] w-full min-h-[100vh] flex items-center justify-center">
-        <div className="relative chatbot-popup overflow-hidden bg-[#fff] w-[420px] rounded-lg shadow">
+      <Wrapper
+        className={`container bg-gradient-to-r from-[#f4f0ff,#dacdff] w-full min-h-[100vh]`}
+      >
+        <button
+          id="chat-bot-toggler"
+          onClick={() => setShowchatBot((prev) => !prev)}
+          className="fixed bottom-[20px] sm:bottom-[30px] right-[20px] sm:right-[35px] border-none w-14 h-14 cursor-pointer rounded-full flex items-center justify-center bg-[#6d4fc2]"
+        >
+          {showchatBot ? (
+            <span className="absolute text-[#fff]">
+              <ICONS.CLOSE size={30} />
+            </span>
+          ) : (
+            <span className="absolute text-[#fff]">
+              <ICONS.MSG size={30} />
+            </span>
+          )}
+        </button>
+        <div
+          className={`chatbot-popup fixed overflow-hidden bg-[#fff] sm:w-[420px] rounded-lg shadow sm:bottom-[100px] w-full bottom-0 right-0 sm:right-[60px] h-full sm:h-auto ${
+            showchatBot
+              ? "opacity-100 translate-y-0 scale-[1] pointer-events-auto"
+              : "opacity-0 translate-y-5 scale-[0.2] pointer-events-none transition-all origin-bottom-right"
+          }`}
+        >
           {/* CHAT HEADER */}
           <div className="chat-header flex bg-[#6D4FC2] items-center justify-between px-5 py-4">
             <div className="flex items-center gap-3 header-info">
               <ICONS.CHAT_BOT className="w-8 h-8 p-1 bg-white rounded-lg fill-[#6d4fc2]" />
               <h2 className="logo-text text-[#fff] text-[1.1rem]">Chatbot</h2>
             </div>
-            <button className="h-[40px] rounded-xl w-[40px] border-none outline-none text-[#fff] text-[1.9rem] pt-[2px] bg-none mr-[-10px] cursor-pointer flex items-center justify-center hover:bg-[#593bab] transition-all">
+            <button
+              onClick={() => setShowchatBot((prev) => !prev)}
+              className="h-[40px] rounded-xl w-[40px] border-none outline-none text-[#fff] text-[1.9rem] pt-[2px] bg-none mr-[-10px] cursor-pointer flex items-center justify-center hover:bg-[#593bab] transition-all"
+            >
               <ICONS.DOWN_ARROW />
             </button>
           </div>
           {/* CHAT BODY */}
-          <div className="chat-body p-[25px] h-[460px] overflow-y-auto flex flex-col gap-5 mb-[80px]">
+          <div
+            ref={chatBodyRef}
+            className="chat-body p-[25px] h-[460px] overflow-y-auto flex flex-col gap-5 mb-[80px]"
+          >
             <div className="flex items-start gap-3 message bot-msg">
               <span className="w-8 h-8 p-1 bg-[#6d4fc2] rounded-lg">
                 <ICONS.CHAT_BOT className="fill-[#fff] w-full h-full" />
@@ -120,6 +159,7 @@ const Wrapper = styled.section`
     background-color: #f6f2ff;
     border-radius: 13px 13px 13px 3px;
   }
+
   .chat-form .msg-text:valid ~ button {
     display: block;
   }
