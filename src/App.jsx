@@ -108,7 +108,8 @@ const App = () => {
           {/* CHAT BODY */}
           <div
             ref={chatBodyRef}
-            className="chat-body p-[25px] sm:h-[460px] h-full overflow-y-auto flex flex-col gap-5 mb-[80px]"
+            // style={{ height: "calc(90% - 55px)" }}
+            className={`chat-body sm:p-[25px] h-[calc(90%-79px)] sm:h-[460px] overflow-y-auto flex flex-col gap-5 mb-[80px] p-3`}
           >
             <div className="flex items-start gap-3 message bot-msg">
               <span className="w-8 h-8 p-1 bg-[#6d4fc2] rounded-lg">
