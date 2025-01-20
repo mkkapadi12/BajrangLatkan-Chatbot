@@ -31,7 +31,7 @@ const App = () => {
     try {
       //make the API call to get the response
       const response = await fetch(
-        `/api/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         requestOptions
       );
 
