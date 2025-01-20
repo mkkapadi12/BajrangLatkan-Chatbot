@@ -34,6 +34,12 @@ const App = () => {
         `/api/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         requestOptions
       );
+
+      if (!response.ok) {
+        const errorData = await response.text(); // Capture the raw response for debugging
+        throw new Error(`API Error: ${errorData || response.status}`);
+      }
+
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.error.message || "Something went wrong !!");
@@ -44,7 +50,8 @@ const App = () => {
 
       updateHistory(apiResponse);
     } catch (error) {
-      console.log(error);
+      console.error("Error generating bot response:", error);
+      updateHistory("Error: Unable to process your request at this time.");
     }
   };
 
