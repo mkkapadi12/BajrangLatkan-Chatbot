@@ -3,11 +3,18 @@ import { ICONS } from "./assets/Icons/icons";
 import styled from "styled-components";
 import ChatForm from "./components/ChatForm";
 import ChatMsg from "./components/ChatMsg";
+import { businessInfo } from "./businessInfo";
 
 const apiKey = process.env.GEMINI_API_KEY;
 
 const App = () => {
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState([
+    {
+      hideInChat: true,
+      role: "model",
+      text: businessInfo,
+    },
+  ]);
   const [showchatBot, setShowchatBot] = useState(false);
   const chatBodyRef = useRef();
 
@@ -96,7 +103,7 @@ const App = () => {
           <div className="chat-header flex bg-[#6D4FC2] items-center justify-between px-5 py-4">
             <div className="flex items-center gap-3 header-info">
               <ICONS.CHAT_BOT className="w-8 h-8 p-1 bg-white rounded-lg fill-[#6d4fc2]" />
-              <h2 className="logo-text text-[#fff] text-[1.1rem]">Chatbot</h2>
+              <h2 className="logo-text text-[#fff] text-[1.1rem]">Bajrang Latkan Chatbot</h2>
             </div>
             <button
               onClick={() => setShowchatBot((prev) => !prev)}
